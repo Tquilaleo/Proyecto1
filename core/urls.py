@@ -23,5 +23,6 @@ urlpatterns = [
     
     path('', HomeView.as_view(), name='home'),
 
-    path('Adepac_/',include('Adepac_.urls', namespace='adepac')),
+    path('',include('Adepac_.urls' )),
+    
 ]

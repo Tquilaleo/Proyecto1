@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Adepac</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Bienvenido a Adepac</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'index' %}">Inicio</a></li>
+                <li><a href="{% url 'lista_productos' %}">Productos</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'perfil' %}">Perfil</a></li>
+                    <li><a href="{% url 'ver_carrito' %}">Carrito</a></li>
+                    <li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Iniciar sesión</a></li>
+                    <li><a href="{% url 'registro' %}">Registrarse</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Nuestros productos destacados</h2>
+            <div class="productos">
+                {% for producto in productos %}
+                    <div class="producto">
+                        <h3>{{ producto.nombre_prod }}</h3>
+                        <p>{{ producto.descripcion }}</p>
+                        <p>Precio: ${{ producto.precio }}</p>
+                        <a href="{% url 'detalle_producto' producto.pk %}">Ver más</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Adepac. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
