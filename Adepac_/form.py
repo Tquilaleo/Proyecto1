@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Cliente,  Producto, Carrito,ItemCarrito
+from .models import Cliente,  Producto, ItemCarrito
 
 class PostCreateForm(forms.ModelForm):
     class Meta:

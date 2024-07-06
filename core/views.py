@@ -7,3 +7,5 @@ class HomeView(View):
 
         }
         return render(request, 'Home.html', context)
+    
+    

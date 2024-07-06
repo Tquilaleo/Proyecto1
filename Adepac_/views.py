@@ -1,7 +1,9 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import View
 from .form import PostCreateForm
-from .models import Cliente
+from .models import Cliente,ItemCarrito, Producto
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 
@@ -70,3 +72,29 @@ class AdepacHomeClienteView(View):
 
         }
         return render(request, 'HomeCliente.html', context)
+    
+
+@login_required
+def ver_carrito(request):
+    carrito_usuario = ItemCarrito.objects.filter(usuario=request.user, comprado=False)
+    total_carrito = sum(item.producto.precio * item.cantidad for item in carrito_usuario)
+    context = {
+        'carrito_usuario': carrito_usuario,
+        'total_carrito': total_carrito
+    }
+    return render(request, 'adepac/carrito.html', context)
+
+@login_required
+def agregar_al_carrito(request, producto_id):
+    producto = Producto.objects.get(id=producto_id)
+    item_carrito, creado = ItemCarrito.objects.get_or_create(producto=producto, usuario=request.user, comprado=False)
+    if not creado:
+        item_carrito.cantidad += 1
+        item_carrito.save()
+    return redirect('ver_carrito')
+
+@login_required
+def eliminar_del_carrito(request, itemcarrito_id):
+    item_carrito = ItemCarrito.objects.get(id=itemcarrito_id)
+    item_carrito.delete()
+    return redirect('ver_carrito')
